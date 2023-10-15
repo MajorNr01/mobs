@@ -38,6 +38,7 @@ include(cmake/ui-elements.cmake)
 include(cmake/ui-windows.cmake)
 include(cmake/feature-importers.cmake)
 include(cmake/feature-browserpanels.cmake)
+include(cmake/feature-mobs.cmake)
 
 if(NOT OAUTH_BASE_URL)
   # cmake-format: off

@@ -1744,6 +1744,9 @@ bool OBSApp::OBSInit()
 			ResetHotkeyState(state == Qt::ApplicationActive);
 		});
 	ResetHotkeyState(applicationState() == Qt::ApplicationActive);
+
+	mobsUI.Init();
+
 	return true;
 }
 

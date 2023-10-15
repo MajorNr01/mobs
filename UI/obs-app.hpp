@@ -37,6 +37,8 @@
 
 #include "window-main.hpp"
 
+#include "mobs/mobs-ui.hpp"
+
 std::string CurrentTimeString();
 std::string CurrentDateTimeString();
 std::string GenerateTimeDateFilename(const char *extension,
@@ -121,6 +123,8 @@ private:
 	inline void ResetHotkeyState(bool inFocus);
 
 	QPalette defaultPalette;
+
+	MOBSUI mobsUI;
 
 	void ParseExtraThemeData(const char *path);
 	static OBSThemeMeta *ParseThemeMeta(const char *path);
