@@ -1508,23 +1508,6 @@
             ]
         },
         {
-            "name": "Chathostess",
-            "servers": [
-                {
-                    "name": "Chathostess - Backup",
-                    "url": "rtmp://wowza05.foobarweb.com/cmschatsys_video"
-                }
-            ],
-            "recommended": {
-                "keyint": 2,
-                "max video bitrate": 3600,
-                "max audio bitrate": 128
-            },
-            "supported video codecs": [
-                "h264"
-            ]
-        },
-        {
             "name": "OnlyFans.com",
             "stream_key_link": "https://onlyfans.com/my/settings/other",
             "servers": [
