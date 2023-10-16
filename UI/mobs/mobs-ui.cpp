@@ -25,15 +25,23 @@ void MOBSUI::Init()
 	connect(mobsWindow, &QWidget::destroyed, App()->GetMainWindow(), &OBSBasic::close);
 
 	layout = new QFormLayout(mobsWindow);
+	layout->setLabelAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
 	mobsButton = new QPushButton("Start Streaming");
 	connect(mobsButton, &QPushButton::clicked, this, &MOBSUI::buttonClicked);
 
-	mobsWindowList = new QComboBox(mobsButton);
+	windowListLabel = new QLabel("Window");
+	mobsWindowListComboBox = new QComboBox(mobsButton);
 	fillWindowList();
-	connect(mobsWindowList, &QComboBox::currentIndexChanged, this, &MOBSUI::windowChanged);
+	connect(mobsWindowListComboBox, &QComboBox::currentIndexChanged, this, &MOBSUI::windowChanged);
 
-	layout->addRow(mobsWindowList);
+	streamKeyLabel = new QLabel("Stream key");
+	streamKeyLineEdit = new QLineEdit();
+	fillStreamKeyTextEdit();
+	connect(streamKeyLineEdit, &QLineEdit::textChanged, this, &MOBSUI::setStreamKey);
+
+	layout->addRow(windowListLabel, mobsWindowListComboBox);
+	layout->addRow(streamKeyLabel, streamKeyLineEdit);
 	layout->addRow(mobsButton);
 
 	mobsWindow->show();
@@ -50,7 +58,30 @@ void MOBSUI::fillWindowList()
 	{
 		std::string itemText = std::string(obs_property_list_item_name(windowCaptureWindowProperty, i));
 		std::string itemValue = std::string(obs_property_list_item_string(windowCaptureWindowProperty, i));
-		mobsWindowList->addItem(itemText.c_str(), itemValue.c_str());
+		mobsWindowListComboBox->addItem(itemText.c_str(), itemValue.c_str());
+	}
+}
+
+void MOBSUI::fillStreamKeyTextEdit()
+{
+	obs_service_t* defaultService = obs_get_service_by_name("default_service");
+
+	if (defaultService != nullptr)
+	{
+		std::string streamKey = obs_service_get_connect_info(defaultService, OBS_SERVICE_CONNECT_INFO_STREAM_KEY);
+		streamKeyLineEdit->setText(streamKey.c_str());
+	}
+}
+
+void MOBSUI::setStreamKey(const QString& text)
+{
+	obs_service_t* defaultService = obs_get_service_by_name("default_service");
+
+	if (defaultService != nullptr)
+	{
+		obs_data_t* settings = obs_service_get_settings(defaultService);
+		obs_data_set_string(settings, "key", text.toStdString().c_str());
+		obs_service_update(defaultService, settings);
 	}
 }
 
@@ -71,7 +102,7 @@ void MOBSUI::buttonClicked(bool checked)
 
 void MOBSUI::windowChanged(int index)
 {
-	std::string currentValue = mobsWindowList->currentData().toString().toStdString();
+	std::string currentValue = mobsWindowListComboBox->currentData().toString().toStdString();
 
 	obs_enum_sources(MOBSUI::setWindowCaptureWindow, &currentValue);
 }

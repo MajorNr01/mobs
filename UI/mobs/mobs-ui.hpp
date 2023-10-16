@@ -5,8 +5,10 @@
 #include <QPointer>
 #include <QWidget>
 #include <QFormLayout>
+#include <QLabel>
 #include <QPushButton>
 #include <QComboBox>
+#include <QLineEdit>
 
 #include <obs.h>
 #include <obs-frontend-api.h>
@@ -17,7 +19,10 @@ private:
 	QPointer<QWidget> mobsWindow;
 
 	QFormLayout* layout;
-	QComboBox* mobsWindowList;
+	QLabel* windowListLabel;
+	QComboBox* mobsWindowListComboBox;
+	QLabel* streamKeyLabel;
+	QLineEdit* streamKeyLineEdit;
 	QPushButton* mobsButton;
 
 public:
@@ -27,6 +32,8 @@ public:
 
 private:
 	void fillWindowList();
+	void fillStreamKeyTextEdit();
+	void setStreamKey(const QString& text);
 	void windowChanged(int index);
 	void buttonClicked(bool checked);
 	static bool setWindowCaptureWindow(void* param, obs_source_t* source);
